@@ -1,0 +1,69 @@
+def is_odd(num):
+    if num % 2 == 0:
+        return False
+    else:
+        return True
+    
+def is_binary_format(num):
+    for number in num:
+        if int(number) != 0 and int(number) != 1:
+            return False
+    return True
+
+def int_to_array_old(integer):
+    return list(map(int, str(integer)))
+
+def int_to_array(n):
+    if n == 0:
+        return [0]
+    
+    digits = []
+    n = abs(n)
+    
+    while n > 0:
+        digits.append(n % 10)
+        n //= 10
+        
+    return digits[::-1]
+
+def array_to_int_old(array):
+    return int("".join(map(str, array)))
+
+def array_to_int(digits):
+    result = 0
+    for d in digits:
+        result = result * 10 + d
+    return result
+
+
+def strange_function(number):
+    number_array = int_to_array(number)
+    if is_binary_format(number_array):
+        return number - 1
+    #number = int_to_array(number)
+    for i in range(len(number_array)):
+        if is_odd(number_array[i]):
+            number_array[i] = 1
+        else:
+            number_array[i] = 0
+    return array_to_int(number_array)
+
+def main_function():
+    test_cases = int(input())
+    test_cases_list = []
+
+    for i in range(test_cases):
+        test_cases_list.append(int(input()))
+
+
+    for i in range(len(test_cases_list)):
+        count = 0
+        test_input = test_cases_list[i]
+        while test_input != 0:
+            test_input = strange_function(test_input)
+            count += 1
+        print(count % ((10**9) + 7))
+
+
+
+main_function()

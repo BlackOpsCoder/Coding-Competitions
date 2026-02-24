@@ -1,56 +1,88 @@
+#!/bin/python3
+
 import math
 import os
 import random
 import re
 import sys
 
+
+#
+# Complete the 'verifyPlate' function below.
+#
+# The function is expected to return a STRING.
+# The function accepts STRING plate as parameter.
+#
+
 def verifyPlate(plate):
-    # Write your code here
-    letters = 0
-    digits = 0
-    dashes = 0
-    spaces = 0
-    character_list = []
-    if len(plate) > 8:
+    letters_count = 0
+    digits_count = 0
+    dashes_count = 0
+    spaces_count = 0
+    plate_format_list = []
+    # Invalid plate if length not between 2 and 8
+    if len(plate) > 8 or len(plate) < 2:
         return "IV"
+        
     plate = list(plate)
+    
     for char in plate:
         if char == " ":
-            spaces += 1
-            character_list.append(" ")
+            spaces_count += 1
+            plate_format_list.append(" ")
         elif char == "-":
-            dashes += 1
-            character_list.append("d")
+            dashes_count += 1
+            plate_format_list.append("d")
         elif char.isalpha():
-            letters += 1
-            character_list.append("a")
-        elif char.isalpha() == False:
-            digits += 1
-            character_list.append("n") 
+            letters_count += 1
+            plate_format_list.append("a")
+        elif char.isdigit():
+            digits_count += 1
+            plate_format_list.append("n") 
         else:
+            # Invalid plate if character other than letter, number, dash, and space
             return "IV"
-            
-    if character_list == ['n', 'n', 'n', 'n', 'n', 'n', 'n']:
+    # Plate is invalid if there are more than one dashes/spaces   
+    if dashes_count + spaces_count > 1:
+        return "IV"
+      
+    if plate_format_list == ['n', 'n', 'n', 'n', 'n', 'n', 'n']:
         return "G7A"
-    elif character_list == ['n', 'n', 'n', 'n', 'n', 'n']:
+    elif plate_format_list == ['n', 'n', 'n', 'n', 'n', 'n']:
         return "G6A"
-    elif character_list == ['a', 'a', 'a', 'd', 'n', 'n', 'n', 'a'] or character_list == ['a', 'a', 'a', 'd', 'a', 'n', 'n', 'n'] or character_list == ['a', 'a', 'a', 'd', 'n', 'a', 'n', 'n'] or character_list == ['a', 'a', 'a', 'd', 'n', 'n', 'a', 'n']:
+    elif plate_format_list[:4] == ['a', 'a', 'a', 'd'] and sorted(plate_format_list[4:]) == ['a', 'n', 'n', 'n']:
         return "G7B"
-    elif character_list == ['a', 'a', 'd', 'n', 'n', 'n', 'n', 'n']:
+    elif plate_format_list == ['a', 'a', 'd', 'n', 'n', 'n', 'n', 'n']:
         return "G7E" 
-    elif character_list == ['a', 'a', 'a', 'd', 'n', 'n', 'a'] or character_list == ['a', 'a', 'a', 'd', 'a', 'n', 'n'] or character_list == ['a', 'a', 'a', 'd', 'n', 'a', 'n']:
+    elif plate_format_list[:4] == ['a', 'a', 'a', 'd'] and sorted(plate_format_list[4:]) == ['a', 'n', 'n']:
         return "G6B"
-    elif character_list == ['n', 'n', 'n', 'd', 'a', 'a', 'a']:
+    elif plate_format_list == ['n', 'n', 'n', 'd', 'a', 'a', 'a']:
         return "G6D"       
-    elif character_list == ['a', 'a', 'a', 'd', 'n', 'n', 'n']:
+    elif plate_format_list == ['a', 'a', 'a', 'd', 'n', 'n', 'n']:
         return "G6C"
-    elif character_list == ['a', 'a', 'a', 'n', 'n', 'n', 'n']:
+    elif plate_format_list == ['a', 'a', 'a', 'n', 'n', 'n', 'n']:
         return "G7D"
-    elif character_list == ['n', 'n', 'n', 'n', 'a', 'a', 'a']:
+    elif plate_format_list == ['n', 'n', 'n', 'n', 'a', 'a', 'a']:
         return "G7C"
-    elif digits == 4 and letters == 3 and dashes == 0 and spaces == 0:
+    # G7F check should always be after the G7C and G7D checks
+    elif digits_count == 4 and letters_count == 3 and dashes_count == 0 and spaces_count == 0:
         return "G7F"
-    elif (character_list[:2] == ['a', 'a']) and ((digits + letters) <= 7) and (dashes + spaces <= 1):
+    elif (plate_format_list[:2] == ['a', 'a']) and ((digits_count + letters_count) <= 7):
         return "V"
     else:
         return "IV"
+       
+              
+    
+        
+
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    plate = input()
+
+    result = verifyPlate(plate)
+
+    fptr.write(result + '\n')
+
+    fptr.close()
