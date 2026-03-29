@@ -346,8 +346,8 @@ if page == "🏠 The Feed":
 
     where_sql = ("WHERE " + " AND ".join(where_clauses)) if where_clauses else ""
     order_sql = {
-        "Newest first":               "ORDER BY timestamp DESC",
-        "Most replies":               "ORDER BY reply_count DESC, timestamp DESC",
+        "Newest first": "ORDER BY timestamp DESC",
+        "Most replies": "ORDER BY reply_count DESC, timestamp DESC",
         "Needs support (no replies)": "ORDER BY reply_count ASC, timestamp DESC",
     }.get(sort_by, "ORDER BY timestamp DESC")
 
@@ -371,7 +371,7 @@ elif page == "📝 Post a Vent":
         🔒 <b>100% anonymous.</b> No account. No username. No trace.<br>
         <code>// this is a safe space. say what you are actually feeling.</code>
     </div>
-    """, unsafe_allow_html=True)
+    """, unsafe_allow_html=True)        
 
     with st.form("vent_form"):
         content = st.text_area(
